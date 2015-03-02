@@ -1,5 +1,5 @@
 __author__ = 'zys'
-from designweb.models import Category, MicroGroup
+from designweb.models import Category
 
 
 def is_order_list_contain_product(order_list, target):

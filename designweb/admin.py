@@ -2,8 +2,8 @@ from django.contrib import admin
 from designweb.models import UserProfile, Product, ProductExtension, Category, Order, OrderDetails, WishList, Cart
 from django.utils.translation import ugettext_lazy
 
-admin.site.site_header = ugettext_lazy('1 dots admin')
-admin.site.site_title = ugettext_lazy('One Dots')
+admin.site.site_header = ugettext_lazy('popdesign admin')
+admin.site.site_title = ugettext_lazy('PopDesign')
 
 
 class ExtensionProductInline(admin.StackedInline):

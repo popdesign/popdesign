@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from designweb.serializer import *
 from designweb.forms import *
-from designweb.models import Order, OrderDetails, Category, MicroGroup
+from designweb.models import Order, OrderDetails, Category
 from designweb.utils import is_order_list_contain_product, get_display_dict, is_user_already_in_group
 
 
@@ -98,14 +98,10 @@ def user_profile(request, pk):
 def product_view(request, pk):
     user = request.user
     product = get_object_or_404(Product, pk=pk)
-    show_create = False
-    micro_group = is_user_already_in_group(user, product)
-    if micro_group is None:
-        show_create = True
     return render(request, 'product.html', {'title': 'PRODUCT',
                                             'pk': product.pk,
-                                            'show_create': show_create,
-                                            'group': micro_group, })
+                                            'show_create': False,
+                                            'group': None, })
 
 
 """     --Ajax views--      """
@@ -202,42 +198,6 @@ def category_view(request, pk):
     return render(request, 'category.html', {'title': 'CATEGORY',
                                              'products': products,
                                              'categories': get_display_dict(title='')['categories']})
-
-
-def micro_group_view(request, product_id, group_id=None):
-    product = get_object_or_404(Product, pk=product_id)
-    show_join = False
-    user = request.user
-
-    if product is None:
-        return
-
-    if group_id is None or not isinstance(group_id, int):   # inside call
-        if user.is_authenticated():
-            micro_group = is_user_already_in_group(user, product)
-            if micro_group is None:
-                # create new group for this user
-                group_price = product.price * product.group_discount
-                micro_group = MicroGroup.objects.create(product=product, owner=user, is_active=True,
-                                                        group_price=group_price, group_discount=product.group_discount)
-                micro_group.members.add(user)
-            return render(request, 'microgroup.html', {'title': 'M-GROUP',
-                                                       'group': micro_group,
-                                                       'product': micro_group.product,
-                                                       'show_join': show_join, })
-        else:
-            return redirect(reverse('design:login'), {'title': 'LOGIN', })
-    else:   # outside call
-        group = get_object_or_404(MicroGroup, pk=group_id)
-        if group is not None:
-            if not group.objects.filter(user=user).exists():
-                show_join = True
-            return render(request, 'microgroup.html', {'title': 'M-GROUP',
-                                                       'group': group,
-                                                       'product': group.product[0],
-                                                       'show_join': show_join, })
-        else:
-            return redirect(reverse('design:home', {'title': 'HOME', }))
 
 
 # ===============================================

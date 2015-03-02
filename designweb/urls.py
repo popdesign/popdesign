@@ -15,9 +15,6 @@ urlpatterns = patterns(
     url(r'^wish/(?P<pk>[0-9]+)/', views.my_wish, name='my-wish'),
     url(r'^order/(?P<pk>[0-9]+)/', views.my_order, name='my-order'),
     url(r'^category/(?P<pk>[0-9]+)/', views.category_view, name='category-view'),
-    # url(r'^microgroup/(?P<pk>[0-9]+)/(?P<product_id>[0-9]+)/$', views.micro_group_view, name='micro-group'),
-    url(r'^microgroup/(?P<product_id>[0-9]+)/(?P<group_id>[0-9]+)/$', views.micro_group_view, name='micro-group-id'),
-    url(r'^microgroup/(?P<product_id>[0-9]+)//$', views.micro_group_view, name='micro-group'),
 
     # api for ajax add and delete
     url(r'^api/cart/(?P<pk>[0-9]+)/add/$', views.add_cart, name='add-to-cart'),
